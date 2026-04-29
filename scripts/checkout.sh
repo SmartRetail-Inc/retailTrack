@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "=============================="
 echo "     AVAILABLE PRODUCTS"
 echo "=============================="
@@ -21,10 +23,11 @@ read product
 echo "Enter quantity:"
 read qty
 
-# clean input (VERY IMPORTANT FIX)
+# clean input
 product=$(echo "$product" | xargs)
 qty=$(echo "$qty" | xargs)
 
+# find product
 line=$(grep -i "^$product," data/inventory.csv)
 
 if [ -z "$line" ]; then
@@ -32,6 +35,7 @@ if [ -z "$line" ]; then
     exit 1
 fi
 
+# extract fields
 name=$(echo "$line" | cut -d',' -f1)
 stock=$(echo "$line" | cut -d',' -f2)
 price=$(echo "$line" | cut -d',' -f3)
@@ -41,20 +45,32 @@ stock=$((stock))
 qty=$((qty))
 price=$((price))
 
+# stock check
 if [ "$qty" -gt "$stock" ]; then
     echo "Not enough stock!"
     exit 1
 fi
 
-# calculations (CORRECT)
+# calculations
 total=$((qty * price))
 new_stock=$((stock - qty))
 
-# update inventory safely
+# update inventory
 sed -i "s/^$name,$stock,$price/$name,$new_stock,$price/" data/inventory.csv
 
-# log sale
+# ==============================
+# LOGGING (IMPORTANT PART)
+# ==============================
+
+# sales log (product,qty,total)
 echo "$name,$qty,$total" >> data/sales.log
+
+# inventory log (movement tracking)
+echo "$(date '+%Y-%m-%d %H:%M:%S') | $name | -$qty | remaining:$new_stock" >> data/inventory.log
+
+# ==============================
+# RECEIPT
+# ==============================
 
 echo ""
 echo "=============================="
