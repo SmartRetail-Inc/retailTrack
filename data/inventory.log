@@ -1,1 +1,2 @@
-echo "$timestamp | $name | -$qty | remaining:$new_stock" >> data/inventory.log
+echo "$timestamp | $name | -$qty | remaining:$new_stock" >> data/inventory.log2026-04-28 22:38:44 | apple | -3 | remaining:47
+2026-04-28 22:43:15 | bread | -2 | remaining:48

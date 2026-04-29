@@ -7,6 +7,7 @@ echo "=============================="
 printf "%-10s | %-6s | %-5s\n" "Product" "Stock" "Price"
 echo "--------------------------------------"
 
+# display products
 while IFS=',' read -r product stock price
 do
     product=$(echo "$product" | xargs)
@@ -27,7 +28,7 @@ read qty
 product=$(echo "$product" | xargs)
 qty=$(echo "$qty" | xargs)
 
-# find product (case insensitive)
+# find product
 line=$(grep -i "^$product," data/inventory.csv)
 
 if [ -z "$line" ]; then
@@ -45,7 +46,7 @@ stock=$((stock))
 qty=$((qty))
 price=$((price))
 
-# stock check
+# validation
 if [ "$qty" -le 0 ]; then
     echo "Invalid quantity!"
     exit 1
@@ -60,16 +61,20 @@ fi
 total=$((qty * price))
 new_stock=$((stock - qty))
 
-# update inventory safely
-sed -i "s/^$name,$stock,$price/$name,$new_stock,$price/" data/inventory.csv
+# safe inventory update (prevents corruption)
+awk -F',' -v name="$name" -v new_stock="$new_stock" -v price="$price" '
+BEGIN {OFS=","}
+$1==name {$2=new_stock; $3=price}
+{print}
+' data/inventory.csv > data/inventory.tmp && mv data/inventory.tmp data/inventory.csv
 
 # ==============================
-# LOGGING (CLEAN FORMAT)
+# LOGGING
 # ==============================
 
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
-# sales log (STRICT FORMAT: product,qty,total)
+# sales log (STRICT CSV)
 echo "$name,$qty,$total" >> data/sales.log
 
 # inventory log (audit trail)
@@ -86,7 +91,7 @@ echo "=============================="
 echo "Item: $name"
 echo "Quantity: $qty"
 echo "Unit Price: $price"
-echo "Total Price: $$total"
+echo "Total Price: $total"
 echo "Time: $timestamp"
 echo "=============================="
 echo "Purchase successful!"

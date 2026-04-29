@@ -4,7 +4,9 @@ echo "=============================="
 echo "   RETAILTRACK POS SYSTEM"
 echo "=============================="
 
+# ==============================
 # LOGIN
+# ==============================
 echo "Username:"
 read username
 
@@ -35,7 +37,10 @@ log_action() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     echo "$timestamp | $username | $1" >> data/console.log
 }
+
+# ==============================
 # MENU LOOP
+# ==============================
 while true
 do
     echo ""
@@ -46,6 +51,8 @@ do
     echo "4. Checkout (Sell Item)"
     echo "5. Backup System"
     echo "6. Exit"
+    echo "7. View Logs"
+    echo "======================"
 
     echo "Select option:"
     read choice
@@ -72,7 +79,7 @@ do
             ;;
 
         5)
-            log_action "Backup System"
+            log_action "Backup System Executed"
             bash scripts/backup.sh
             ;;
 
@@ -80,6 +87,11 @@ do
             log_action "Exited System"
             echo "Goodbye!"
             exit
+            ;;
+
+        7)
+            log_action "Viewed Logs"
+            bash scripts/log_menu.sh
             ;;
 
         *)
