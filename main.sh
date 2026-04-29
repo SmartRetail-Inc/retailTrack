@@ -28,6 +28,13 @@ fi
 
 echo "Login successful. Welcome $username!"
 
+# ==============================
+# LOG FUNCTION (STEP 1 ADDED)
+# ==============================
+log_action() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | $username | $1" >> data/console.log
+}
+
 # MENU LOOP
 while true
 do
@@ -44,12 +51,39 @@ do
     read choice
 
     case $choice in
-        1) bash scripts/low_stock.sh ;;
-        2) bash scripts/sales_report.sh ;;
-        3) bash scripts/search_product.sh ;;
-        4) bash scripts/checkout.sh ;;
-        5) bash scripts/backup.sh ;;
-        6) echo "Goodbye!"; exit ;;
-        *) echo "Invalid option" ;;
+        1)
+            log_action "Viewed Low Stock"
+            bash scripts/low_stock.sh
+            ;;
+
+        2)
+            log_action "Viewed Sales Report"
+            bash scripts/sales_report.sh
+            ;;
+
+        3)
+            log_action "Searched Product"
+            bash scripts/search_product.sh
+            ;;
+
+        4)
+            log_action "Checkout Started"
+            bash scripts/checkout.sh
+            ;;
+
+        5)
+            log_action "Backup System"
+            bash scripts/backup.sh
+            ;;
+
+        6)
+            log_action "Exited System"
+            echo "Goodbye!"
+            exit
+            ;;
+
+        *)
+            echo "Invalid option"
+            ;;
     esac
 done
