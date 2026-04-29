@@ -1,28 +1,26 @@
 echo "=============================="
 echo "     AVAILABLE PRODUCTS"
 echo "=============================="
-echo ""
 
-# Show products before buying
-printf "%-10s | %s\n" "Product" "Stock"
-echo "-----------------------------"
+printf "%-10s | %-6s | %-5s\n" "Product" "Stock" "Price"
+echo "--------------------------------------"
 
-while IFS=',' read -r product stock
+while IFS=',' read -r product stock price
 do
-    printf "%-10s | %s\n" "$product" "$stock"
+    product=$(echo "$product" | xargs)
+    stock=$(echo "$stock" | xargs)
+    price=$(echo "$price" | xargs)
+
+    printf "%-10s | %-6s | $%-5s\n" "$product" "$stock" "$price"
 done < data/inventory.csv
 
 echo ""
-echo "=============================="
-
-# Now take purchase input
-echo "Enter product you want to buy:"
+echo "Enter product:"
 read product
 
 echo "Enter quantity:"
 read qty
 
-# Find product
 line=$(grep -i "^$product," data/inventory.csv)
 
 if [ -z "$line" ]; then
@@ -30,24 +28,32 @@ if [ -z "$line" ]; then
     exit 1
 fi
 
-name=$(echo $line | cut -d',' -f1)
-stock=$(echo $line | cut -d',' -f2)
+name=$(echo "$line" | cut -d',' -f1)
+stock=$(echo "$line" | cut -d',' -f2)
+price=$(echo "$line" | cut -d',' -f3)
 
-# Check stock
 if [ "$qty" -gt "$stock" ]; then
-    echo "Not enough stock available!"
+    echo "Not enough stock!"
     exit 1
 fi
 
-# Update stock
+# calculations
+total=$((qty * price))
 new_stock=$((stock - qty))
-sed -i "s/^$name,$stock/$name,$new_stock/" data/inventory.csv
 
-# Log sale
-echo "$name $qty" >> data/sales.log
+# update inventory
+sed -i "s/^$name,$stock,$price/$name,$new_stock,$price/" data/inventory.csv
+
+# log sale (product qty total)
+echo "$name,$qty,$total" >> data/sales.log
 
 echo ""
-echo "✅ Purchase successful!"
+echo "=============================="
+echo "      RECEIPT"
+echo "=============================="
 echo "Item: $name"
 echo "Quantity: $qty"
-echo "Remaining stock: $new_stock"
+echo "Unit Price: $price"
+echo "Total Price: $$total"
+echo "=============================="
+echo "Purchase successful!"
