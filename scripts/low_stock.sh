@@ -1,3 +1,2 @@
-git add .
-git commit -m "RT-2: Add low stock checker"
-git push origin feature/low-stock
+echo "LOW STOCK ITEMS:"
+awk -F, '$2 < 5 {print $1 " - stock: " $2}' data/inventory.csv

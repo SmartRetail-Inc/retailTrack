@@ -1,3 +1,10 @@
-git add .
-git commit -m "RT-4: Add backup system"
-git push origin feature/backup
+echo "Creating backup..."
+
+mkdir -p data/backup
+
+cp data/inventory.csv data/backup/
+cp data/sales.log data/backup/
+
+echo "Backup done at $(date)" >> data/backup_log.txt
+
+echo "System backup completed."

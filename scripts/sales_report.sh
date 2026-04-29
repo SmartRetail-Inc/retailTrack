@@ -1,3 +1,2 @@
-git add .
-git commit -m "RT-3: Add sales report"
-git push origin feature/sales-report
+echo "SALES REPORT:"
+awk '{sum += $2} END {print "Total Items Sold:", sum}' data/sales.log

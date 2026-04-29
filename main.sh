@@ -1,12 +1,14 @@
 #!/bin/bash
 
-echo "===== RetailTrack System ====="
+echo "=============================="
+echo "   RETAILTRACK POS SYSTEM"
+echo "=============================="
 
-# 🔐 LOGIN
-echo "Enter username:"
+# LOGIN
+echo "Username:"
 read username
 
-echo "Enter PIN:"
+echo "PIN:"
 read pin
 
 valid=false
@@ -26,19 +28,19 @@ fi
 
 echo "Login successful. Welcome $username!"
 
-# 🔁 INTERACTIVE MENU LOOP
+# MENU LOOP
 while true
 do
     echo ""
     echo "===== MAIN MENU ====="
-    echo "1. Low Stock"
-    echo "2. Sales Summary"
+    echo "1. View Low Stock"
+    echo "2. Sales Report"
     echo "3. Search Product"
-    echo "4. Checkout"
-    echo "5. Backup"
+    echo "4. Checkout (Sell Item)"
+    echo "5. Backup System"
     echo "6. Exit"
 
-    echo "Choose option:"
+    echo "Select option:"
     read choice
 
     case $choice in
