@@ -29,12 +29,12 @@ fi
 echo "Login successful. Welcome $username!"
 
 # ==============================
-# LOG FUNCTION (STEP 1 ADDED)
+# LOG FUNCTION
 # ==============================
 log_action() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') | $username | $1" >> data/console.log
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    echo "$timestamp | $username | $1" >> data/console.log
 }
-
 # MENU LOOP
 while true
 do

@@ -1,0 +1,1 @@
+echo "$timestamp | $name | -$qty | remaining:$new_stock" >> data/inventory.log

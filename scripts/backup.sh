@@ -1,10 +1,19 @@
+#!/bin/bash
+
 echo "Creating backup..."
 
+# create backup folder
 mkdir -p data/backup
 
-cp data/inventory.csv data/backup/
-cp data/sales.log data/backup/
+# timestamp (consistent with all logs)
+timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
-echo "Backup done at $(date)" >> data/backup_log.txt
+# copy files
+cp data/inventory.csv data/backup/inventory_backup.csv
+cp data/sales.log data/backup/sales_backup.log
+cp data/console.log data/backup/console_backup.log
 
-echo "System backup completed."
+# structured backup log
+echo "$timestamp | BACKUP CREATED | inventory,sales,console" >> data/backup.log
+
+echo "System backup completed at $timestamp"
