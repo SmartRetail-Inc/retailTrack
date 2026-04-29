@@ -27,7 +27,7 @@ read qty
 product=$(echo "$product" | xargs)
 qty=$(echo "$qty" | xargs)
 
-# find product
+# find product (case insensitive)
 line=$(grep -i "^$product," data/inventory.csv)
 
 if [ -z "$line" ]; then
@@ -46,6 +46,11 @@ qty=$((qty))
 price=$((price))
 
 # stock check
+if [ "$qty" -le 0 ]; then
+    echo "Invalid quantity!"
+    exit 1
+fi
+
 if [ "$qty" -gt "$stock" ]; then
     echo "Not enough stock!"
     exit 1
@@ -55,18 +60,20 @@ fi
 total=$((qty * price))
 new_stock=$((stock - qty))
 
-# update inventory
+# update inventory safely
 sed -i "s/^$name,$stock,$price/$name,$new_stock,$price/" data/inventory.csv
 
 # ==============================
-# LOGGING (IMPORTANT PART)
+# LOGGING (CLEAN FORMAT)
 # ==============================
 
-# sales log (product,qty,total)
+timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+# sales log (STRICT FORMAT: product,qty,total)
 echo "$name,$qty,$total" >> data/sales.log
 
-# inventory log (movement tracking)
-echo "$(date '+%Y-%m-%d %H:%M:%S') | $name | -$qty | remaining:$new_stock" >> data/inventory.log
+# inventory log (audit trail)
+echo "$timestamp | $name | -$qty | remaining:$new_stock" >> data/inventory.log
 
 # ==============================
 # RECEIPT
@@ -80,5 +87,6 @@ echo "Item: $name"
 echo "Quantity: $qty"
 echo "Unit Price: $price"
 echo "Total Price: $$total"
+echo "Time: $timestamp"
 echo "=============================="
 echo "Purchase successful!"
