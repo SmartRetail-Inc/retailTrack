@@ -1,33 +1,33 @@
+#!/bin/bash
+
 echo "=============================="
 echo "      SALES REPORT"
 echo "=============================="
 echo "Generated on: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "=============================="
 
-total=0
-
-if [ ! -s data/sales.log ]; then
-    echo "No sales recorded yet."
-    exit 0
-fi
-
 printf "%-15s %-10s %-10s\n" "Product" "Qty" "Total"
 echo "--------------------------------------------"
 
+total_sales=0
+
 while IFS=',' read -r product qty total
 do
-    # skip broken lines
-    if ! [[ "$qty" =~ ^[0-9]+$ ]]; then
-        continue
-    fi
+    # skip empty lines
+    [ -z "$product" ] && continue
 
-    echo "$product sold: $qty | Total: $$total"
+    # clean numeric values
+    qty=$(echo "$qty" | tr -cd '0-9')
+    total=$(echo "$total" | tr -cd '0-9')
 
-    total=$((total + total))
+    echo "$product sold: $qty | Total: $total"
+
+    # IMPORTANT: numeric addition ONLY
+    total_sales=$((total_sales + total))
 
 done < data/sales.log
 
 echo ""
 echo "=============================="
-echo "TOTAL SALES: $$total"
+echo "TOTAL SALES: $total_sales"
 echo "=============================="
