@@ -4,10 +4,15 @@ echo "=============================="
 
 total=0
 
-while IFS=',' read -r product qty price
+if [ ! -s data/sales.log ]; then
+    echo "No sales recorded yet."
+    exit 0
+fi
+
+while read -r product qty
 do
-    echo "$product sold: $qty | Total: $$price"
-    total=$((total + price))
+    echo "$product sold: $qty | Total: $$qty"
+    total=$((total + qty))
 done < data/sales.log
 
 echo "------------------------------"
