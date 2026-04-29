@@ -21,6 +21,10 @@ read product
 echo "Enter quantity:"
 read qty
 
+# clean input (VERY IMPORTANT FIX)
+product=$(echo "$product" | xargs)
+qty=$(echo "$qty" | xargs)
+
 line=$(grep -i "^$product," data/inventory.csv)
 
 if [ -z "$line" ]; then
@@ -32,19 +36,24 @@ name=$(echo "$line" | cut -d',' -f1)
 stock=$(echo "$line" | cut -d',' -f2)
 price=$(echo "$line" | cut -d',' -f3)
 
+# force numeric safety
+stock=$((stock))
+qty=$((qty))
+price=$((price))
+
 if [ "$qty" -gt "$stock" ]; then
     echo "Not enough stock!"
     exit 1
 fi
 
-# calculations
+# calculations (CORRECT)
 total=$((qty * price))
 new_stock=$((stock - qty))
 
-# update inventory
+# update inventory safely
 sed -i "s/^$name,$stock,$price/$name,$new_stock,$price/" data/inventory.csv
 
-# log sale (product qty total)
+# log sale
 echo "$name,$qty,$total" >> data/sales.log
 
 echo ""
