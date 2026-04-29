@@ -1,359 +1,202 @@
-Good—this is what you actually need for full marks: a **complete end-to-end documentation** that shows installation → GitHub setup → cloning → running → and script explanations.
+# 🛒 RetailTrack POS System
 
-Below is a **fully polished, submission-ready README.md** you can paste directly into GitHub.
-
----
-
-# 📄 FULL PROJECT DOCUMENTATION (README.md)
-
-````markdown
-# 🏪 RetailTrack POS System (Bash + Git Project)
-
-A terminal-based Point of Sale (POS) system built using Bash scripting.  
-It simulates real retail operations including login authentication, inventory management, sales tracking, and automated backups.
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Status](https://img.shields.io/badge/status-stable-brightgreen)
+![Language](https://img.shields.io/badge/language-Bash-4EAA25)
+![Platform](https://img.shields.io/badge/platform-Linux-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-yellow)
 
 ---
 
-# 🧠 1. SYSTEM OVERVIEW
+## 📌 Overview
 
-RetailTrack is designed to simulate a real-world retail environment where:
-- Staff log in using credentials
-- A menu-driven system is used to perform operations
-- Inventory updates in real time
-- Sales are recorded automatically
-- Backups are created for safety
-- Git is used for version control
+RetailTrack is a **terminal-based Point of Sale (POS) system** built using Bash scripting.  
+It simulates a real-world retail environment with features such as inventory control, checkout processing, sales reporting, logging, and system backup.
 
----
-
-# 💻 2. SOFTWARE INSTALLATION (BEGINNING SETUP)
-
-## 🟢 Step 1: Install Git
-
-### Windows:
-1. Download Git from: https://git-scm.com
-2. Install using default settings
-3. Enable "Git Bash" during installation
-
-### Verify installation:
-```bash
-git --version
-````
+This project demonstrates:
+- Shell scripting automation
+- File-based data management
+- Logging and auditing systems
+- Modular software design
 
 ---
 
-## 🟢 Step 2: Configure Git
+## 🚀 Features
 
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "your@email.com"
-```
+### 🔐 Authentication System
+- User login using `users.txt`
+- PIN-based validation
+- Session tracking via console logs
 
----
+### 📦 Inventory Management
+- View available products
+- Stock tracking
+- Automatic stock deduction after purchase
 
-## 🌐 3. CREATE GITHUB REPOSITORY
+### 🛒 Checkout System
+- Product selection
+- Quantity validation
+- Real-time total calculation
+- Receipt generation
 
-1. Go to [https://github.com](https://github.com)
-2. Click **New Repository**
-3. Name: `RetailTrack`
-4. Select:
+### 📊 Sales Reporting
+- Displays all sales records
+- Shows quantity sold per item
+- Calculates total revenue
+- Timestamped report generation
 
-   * Public repository
-   * Add README (optional)
+### 📜 Logging System
+- Console activity log (`console.log`)
+- Sales log (`sales.log`)
+- Inventory movement log (`inventory.log`)
 
----
+### 💾 Backup System
+- Copies inventory and sales data
+- Timestamped backup logs
+- Stored in `data/backup/`
 
-## 🔗 4. CLONE REPOSITORY TO COMPUTER
-
-```bash
-git clone https://github.com/YOUR-USERNAME/RetailTrack.git
-cd RetailTrack
-```
-
----
-
-# 🌿 5. BRANCHING STRATEGY (GIT WORKFLOW)
-
-We use feature branches for development:
-
-```bash
-main
-├── feature/login
-├── feature/checkout
-├── feature/backup
-├── feature/sales-report
-├── bugfix/search
-```
-
-Create branch:
-
-```bash
-git checkout -b feature/checkout
-```
+### 📁 Log Viewer Menu
+- View all system logs in one interface
+- Admin-style navigation menu
 
 ---
 
-# 📁 6. PROJECT STRUCTURE
+## 🗂️ Project Structure
 
-```
 
 RetailTrack/
 │
 ├── main.sh
 ├── users.txt
+├── .gitignore
 │
 ├── scripts/
-│   ├── low_stock.sh
-│   ├── sales_report.sh
-│   ├── search_product.sh
-│   ├── checkout.sh
-│   ├── backup.sh
+│ ├── checkout.sh
+│ ├── sales_report.sh
+│ ├── search_product.sh
+│ ├── low_stock.sh
+│ ├── backup.sh
+│ ├── log_menu.sh
 │
 ├── data/
-│   ├── inventory.csv
-│   ├── sales.log
-│   └── backup_log.txt
+│ ├── inventory.csv
+│ ├── sales.log
+│ ├── inventory.log
+│ ├── console.log
+│ ├── backup/
+│
+└── README.md
 
-```
 
 ---
 
-# ▶️ 7. HOW TO RUN THE SYSTEM
+## ⚙️ Installation & Setup
 
+### 1. Clone Repository
 ```bash
-bash main.sh
-```
-
-OR:
-
-```bash
+git clone https://github.com/ORG_NAME/RetailTrack.git
+cd RetailTrack
+2. Give Execution Permissions
 chmod +x main.sh
-./main.sh
-```
-
----
-
-# 🔐 8. LOGIN SYSTEM
-
-File: `users.txt`
-
-Format:
-
-```
-username:pin
-```
-
-Example:
-
-```
+chmod +x scripts/*.sh
+3. Run the System
+bash main.sh
+🔐 Demo Login Credentials
 Jordy:1234
 Joy:1234
 Effa:1234
-```
-
-✔ System checks username and PIN before allowing access.
-
----
-
-# 🧠 9. MAIN SCRIPT (main.sh)
-
-### PURPOSE:
-
-Controls entire system (entry point)
-
-### FEATURES:
-
-* Login authentication
-* Menu system
-* Calls all other scripts
-
-### MENU OPTIONS:
-
-1. Low Stock Check
-2. Sales Report
-3. Search Product
-4. Checkout (Sell Item)
-5. Backup System
-6. Exit
-
----
-
-# 📉 10. low_stock.sh
-
-### PURPOSE:
-
-Checks inventory levels
-
-### HOW IT WORKS:
-
-Reads `inventory.csv` and shows items with stock < 5
-
----
-
-# 💰 11. sales_report.sh
-
-### PURPOSE:
-
-Generates total sales report
-
-### HOW IT WORKS:
-
-Reads `sales.log` and sums quantities sold
-
----
-
-# 🔍 12. search_product.sh
-
-### PURPOSE:
-
-Searches for a product in inventory
-
-### HOW IT WORKS:
-
-Uses `grep` to find product in `inventory.csv`
-
----
-
-# 🛒 13. checkout.sh (MOST IMPORTANT)
-
-### PURPOSE:
-
-Simulates a real purchase system
-
-### HOW IT WORKS:
-
-1. User enters product name
-2. User enters quantity
-3. System checks stock
-4. Reduces inventory
-5. Records sale in `sales.log`
-
----
-
-# 💾 14. backup.sh
-
-### PURPOSE:
-
-Creates system backup
-
-### HOW IT WORKS:
-
-* Copies inventory and sales files
-* Stores them in backup folder
-* Logs timestamp in `backup_log.txt`
-
----
-
-# 📊 15. DATA FILES
-
-## inventory.csv
-
-```
-apple,10
-banana,5
-milk,3
-orange,8
-```
-
-## sales.log
-
-```
-apple 2
-banana 1
-```
-
----
-
-# 🔄 16. GIT COMMANDS USED
-
-```bash
-git add .
-git commit -m "message"
-git push origin main
-git pull origin main
-```
-
----
-
-# 🚀 17. COMPLETE WORKFLOW
-
-### Step-by-step system usage:
-
-1. Clone repository
-2. Install Git
-3. Create branches for features
-4. Develop scripts
-5. Commit changes
-6. Push to GitHub
-7. Run system using:
-
-```bash
-bash main.sh
-```
-
----
-
-# 🧪 18. HOW TO TEST SYSTEM
-
-Login:
-
-```
-Username: Jordy
-PIN: 1234
-```
-
-Then:
-
-* Press 1 → Low stock
-* Press 4 → Checkout
-* Press 2 → Sales report
-* Press 5 → Backup
-
----
-
-# 🏆 19. PROJECT OUTCOME
-
-This project demonstrates:
-
-* Bash scripting
-* File handling
-* System automation
-* Git version control
-* Real-world POS simulation
-
----
-
-# 👨‍💻 AUTHOR
-
-Student Project – Retail POS System
-Built using Bash, Git, and GitHub
-
-```
-
----
-
-# 🎯 WHAT YOU NOW HAVE
-
-✔ Full installation guide  
-✔ Git + GitHub workflow  
-✔ Clone + push explanation  
-✔ Every script explained  
-✔ Full system architecture  
-✔ How to run + test  
-✔ Professional documentation (A+ level)
-
----
-
-# 👍 IF YOU WANT FINAL BOOST (HIGHLY RECOMMENDED)
-
-I can still help you with:
-
-### 🎤 1. FINAL VIVA SIMULATION (REAL EXAM STYLE)
-I ask questions like your teacher + you answer
-
-### 📊 2. GITHUB SUBMISSION CHECKLIST (WHAT MARKERS CHECK FIRST)
-
-### 🧪 3. “WHAT TO DO IF DEMO BREAKS” emergency script
-
-Just tell me 👍
-```
+Solomon:1234
+Jen:1234
+Smith:1234
+Franck:1234
+Gael:1234
+🧾 How It Works
+Step 1: Login
+
+User authenticates using username and PIN.
+
+Step 2: Main Menu
+
+User selects operations:
+
+View inventory
+Checkout items
+View sales report
+Search products
+Backup system
+View logs
+Step 3: Checkout Process
+Product list displayed
+User enters product + quantity
+System validates stock
+Inventory updated
+Sale recorded in logs
+Receipt generated
+📊 Sales Report Example
+Product         Qty        Total
+--------------------------------------------
+apple sold: 3 | Total: 3
+bread sold: 2 | Total: 2
+
+TOTAL SALES: 5
+📜 Logging System
+Log File	Description
+sales.log	Records all sales (product, qty, total)
+inventory.log	Tracks stock changes
+console.log	Tracks user actions
+💾 Backup System
+
+Backups are stored in:
+
+data/backup/
+
+Includes:
+
+inventory snapshot
+sales log copy
+timestamped backup record
+🧠 System Architecture
+        ┌────────────────────┐
+        │     main.sh        │
+        │  Menu Controller   │
+        └────────┬───────────┘
+                 │
+ ┌───────────────┼────────────────┐
+ │               │                │
+ ▼               ▼                ▼
+Login        Checkout        Sales Report
+ │               │                │
+ ▼               ▼                ▼
+users.txt   inventory.csv    sales.log
+                 │                │
+                 ▼                ▼
+         inventory.log     console.log
+🐞 Bug Fixes (Development History)
+RETAIL-001: Login validation failure
+Fixed incorrect delimiter parsing in users.txt
+RETAIL-002: Checkout total corruption (e.g. 3125total)
+Fixed string concatenation in arithmetic operations
+RETAIL-003: Sales report duplication
+Fixed loop variable reuse and parsing logic
+RETAIL-004: Inventory corruption via sed
+Replaced sed with safe awk update method
+RETAIL-005: Logging inconsistency
+Standardized log formats across all modules
+📈 Improvements Made
+Modular script design
+Centralized logging system
+Improved input validation
+Safer inventory updates
+Structured reporting system
+
+
+RetailTrack is a modular Bash-based POS system that demonstrates real-world software design concepts such as authentication, inventory control, transaction logging, and system auditing using file-based data structures and shell scripting automation.
+
+📌 Author
+
+Developed as a learning project to demonstrate:
+
+Linux shell scripting
+File system operations
+Modular system design
+Basic software engineering principles
