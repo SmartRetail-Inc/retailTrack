@@ -1,13 +1,14 @@
-# RetailTrack POS - ignore runtime files
+# RetailTrack POS System
 
-# Logs
+# Logs (do not track runtime logs)
 data/*.log
 
-# Backup files
+# Backup folder
 data/backup/
 
 # Temporary files
 *.tmp
+*.bak
 
 # System files
 .DS_Store
@@ -16,6 +17,3 @@ Thumbs.db
 # Editor folders
 .vscode/
 .idea/
-
-# Backup leftovers
-*.bak
