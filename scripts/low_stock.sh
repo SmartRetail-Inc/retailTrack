@@ -1,19 +1,21 @@
+#!/bin/bash
+
 echo "=============================="
 echo "      LOW STOCK CHECK"
 echo "=============================="
 
 found=0
 
-while IFS=',' read -r product stock price
+while IFS=',' read -r id name category stock price
 do
-    product=$(echo "$product" | xargs)
+    name=$(echo "$name" | xargs)
     stock=$((stock))
 
     if [ "$stock" -lt 5 ]; then
-        echo "$product is LOW STOCK ($stock left)"
+        echo "⚠️  $id | $name ($category) - LOW STOCK ($stock left)"
         found=1
     fi
-done < data/inventory.csv
+done < <(tail -n +2 data/inventory.csv)
 
 echo ""
 
