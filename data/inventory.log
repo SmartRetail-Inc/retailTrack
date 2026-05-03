@@ -3,3 +3,4 @@ echo "$timestamp | $name | -$qty | remaining:$new_stock" >> data/inventory.log20
 2026-04-28 22:58:24 | eggs | -6 | remaining:44
 2026-04-29 17:35:07 | mango | -10 | remaining:38
 2026-05-03 17:37:05 | P001 | -10 | remaining:
+2026-05-03 18:33:46 | P001 | iPhone 13 | -10 | remaining:5
