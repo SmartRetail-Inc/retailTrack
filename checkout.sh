@@ -1,14 +1,16 @@
 #!/bin/bash
 
+clear
+
 echo "=============================="
 echo "     AVAILABLE PRODUCTS"
 echo "=============================="
 
-printf "%-6s | %-15s | %-10s | %-6s | %-5s\n" "ID" "Name" "Category" "Stock" "Price"
-echo "--------------------------------------------------------------"
+printf "%-6s | %-18s | %-10s | %-6s | %-10s\n" "ID" "Name" "Category" "Stock" "Price"
+echo "---------------------------------------------------------------------"
 
-# display products
-while IFS=',' read -r id name category stock price
+# display sorted products by ID
+sort data/inventory.csv | while IFS=',' read -r id name category stock price
 do
     id=$(echo "$id" | xargs)
     name=$(echo "$name" | xargs)
@@ -16,8 +18,16 @@ do
     stock=$(echo "$stock" | xargs)
     price=$(echo "$price" | xargs)
 
-    printf "%-6s | %-15s | %-10s | %-6s | $%-5s\n" "$id" "$name" "$category" "$stock" "$price"
-done < data/inventory.csv
+    # low stock warning
+    if [[ "$stock" =~ ^[0-9]+$ ]] && [ "$stock" -le 5 ]; then
+        stock_display="\033[1;31m$stock (LOW)\033[0m"
+    else
+        stock_display="$stock"
+    fi
+
+    printf "%-6s | %-18s | %-10s | %-6b | $%-10s\n" \
+    "$id" "$name" "$category" "$stock_display" "$price"
+done
 
 echo ""
 echo "Enter Product ID:"
@@ -30,26 +40,35 @@ read qty
 id=$(echo "$id" | xargs)
 qty=$(echo "$qty" | xargs)
 
-# find product by ID
-line=$(grep "^$id," data/inventory.csv)
+# find product
+line=$(grep -E "^$id," data/inventory.csv | head -n 1)
 
 if [ -z "$line" ]; then
     echo "Product not found!"
     exit 1
 fi
 
-# extract fields
-name=$(echo "$line" | cut -d',' -f2)
-category=$(echo "$line" | cut -d',' -f3)
-stock=$(echo "$line" | cut -d',' -f4)
-price=$(echo "$line" | cut -d',' -f5)
+# extract fields safely
+name=$(echo "$line" | cut -d',' -f2 | xargs)
+category=$(echo "$line" | cut -d',' -f3 | xargs)
+stock=$(echo "$line" | cut -d',' -f4 | xargs)
+price=$(echo "$line" | cut -d',' -f5 | xargs)
 
-# force numeric safety
-stock=$((stock))
-qty=$((qty))
-price=$((price))
+# remove Windows line endings safety
+stock=${stock//$'\r'/}
+price=${price//$'\r'/}
 
 # validation
+if ! [[ "$stock" =~ ^[0-9]+$ ]]; then
+    echo "ERROR: invalid stock value: $stock"
+    exit 1
+fi
+
+if ! [[ "$price" =~ ^[0-9]+$ ]]; then
+    echo "ERROR: invalid price value: $price"
+    exit 1
+fi
+
 if ! [[ "$qty" =~ ^[0-9]+$ ]]; then
     echo "Invalid quantity!"
     exit 1
@@ -69,29 +88,20 @@ fi
 total=$((qty * price))
 new_stock=$((stock - qty))
 
-# safe inventory update
+# update inventory
 awk -F',' -v id="$id" -v new_stock="$new_stock" '
 BEGIN {OFS=","}
 $1==id {$4=new_stock}
 {print}
 ' data/inventory.csv > data/inventory.tmp && mv data/inventory.tmp data/inventory.csv
 
-# ==============================
-# LOGGING
-# ==============================
-
+# logs
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
-# sales log
 echo "$timestamp,$id,$name,$qty,$total" >> data/sales.log
-
-# inventory log
 echo "$timestamp | $id | $name | -$qty | remaining:$new_stock" >> data/inventory.log
 
-# ==============================
-# RECEIPT
-# ==============================
-
+# receipt
 echo ""
 echo "=============================="
 echo "         RECEIPT"
@@ -100,8 +110,8 @@ echo "Product ID: $id"
 echo "Name: $name"
 echo "Category: $category"
 echo "Quantity: $qty"
-echo "Unit Price: \$${price}"
-echo "Total Price: \$${total}"
+echo "Unit Price: $$price"
+echo "Total Price: $$total"
 echo "Time: $timestamp"
 echo "=============================="
 echo "Purchase successful!"
