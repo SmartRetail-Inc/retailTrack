@@ -6,28 +6,25 @@ echo "=============================="
 echo "Generated on: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "=============================="
 
-printf "%-15s %-10s %-10s\n" "Product" "Qty" "Total"
-echo "--------------------------------------------"
+printf "%-6s | %-15s | %-5s | %-8s | %-8s\n" "ID" "Product" "Qty" "Price" "Total"
+echo "-----------------------------------------------------------"
 
 total_sales=0
 
-while IFS=',' read -r product qty total
+while IFS=',' read -r id name qty price total
 do
-    # skip empty lines
-    [ -z "$product" ] && continue
+    [ -z "$id" ] && continue
 
-    # clean numeric values
     qty=$(echo "$qty" | tr -cd '0-9')
     total=$(echo "$total" | tr -cd '0-9')
 
-    echo "$product sold: $qty | Total: $total"
+    printf "%-6s | %-15s | %-5s | $%-7s | $%-8s\n" "$id" "$name" "$qty" "$price" "$total"
 
-    # IMPORTANT: numeric addition ONLY
     total_sales=$((total_sales + total))
 
 done < data/sales.log
 
 echo ""
 echo "=============================="
-echo "TOTAL SALES: $total_sales"
+echo "TOTAL SALES: \$$total_sales"
 echo "=============================="
