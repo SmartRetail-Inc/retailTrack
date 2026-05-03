@@ -1,4 +1,5 @@
-echo "$timestamp | $name | -$qty | remaining:$new_stock" >> data/inventory.log2026-04-28 22:38:44 | apple | -3 | remaining:47
+2026-04-28 22:38:44 | apple | -? | remaining:?
 2026-04-28 22:43:15 | bread | -2 | remaining:48
 2026-04-28 22:58:24 | eggs | -6 | remaining:44
 2026-04-29 20:18:30 | banana | -5 | remaining:45
+2026-04-29 17:35:07 | mango | -10 | remaining:38
