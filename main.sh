@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=============================="
-echo "   RETAILTRACK POS SYSTEM"
+echo "   TECHSTORE POS SYSTEM       "
 echo "=============================="
 
 # ==============================
