@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=============================="
-echo "   TECHSTORE POS SYSTEM"
+echo "   TECHSTORE POS SYSTEM       "
 echo "=============================="
 
 # ==============================
