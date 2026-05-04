@@ -1,6 +1,15 @@
+<<<<<<< HEAD
+apple,47,1
+banana,45,1
+orange,50,1
+bread,48,1
+eggs,44,1
+mango,48,1
+=======
 ID,Name,Category,Stock,Price
 P001,iPhone 13,Phone,14,999
 P002,Samsung S23,Phone,20,899
 P003,MacBook Air,Laptop,10,1299
 P004,Dell XPS 13,Laptop,1,1199
 P005,iPad Pro,Tablet,10,799
+>>>>>>> c23277eb715cb03baeed12219f2ba72113338f46

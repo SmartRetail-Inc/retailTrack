@@ -1,0 +1,168 @@
+#!/bin/bash
+
+DATA_DIR="data"
+INVENTORY_FILE="$DATA_DIR/inventory.csv"
+SALES_LOG="$DATA_DIR/sales.log"
+INVENTORY_LOG="$DATA_DIR/inventory.log"
+CONSOLE_LOG="$DATA_DIR/console.log"
+BACKUP_DIR="$DATA_DIR/backup"
+USERS_FILE="users.txt"
+
+mkdir -p "$BACKUP_DIR"
+
+log_console() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$CONSOLE_LOG"
+}
+
+# 🔐 LOGIN SYSTEM
+login() {
+    echo "==== LOGIN ===="
+    read -p "Username: " username
+    read -s -p "PIN: " pin
+    echo ""
+
+    if grep -q "^$username:$pin$" "$USERS_FILE"; then
+        log_console "User $username logged in"
+        echo "Login successful!"
+    else
+        log_console "Failed login attempt for $username"
+        echo "Invalid credentials!"
+        exit 1
+    fi
+}
+
+# 📦 VIEW INVENTORY
+view_inventory() {
+    echo "==== INVENTORY ===="
+    column -t -s, "$INVENTORY_FILE"
+    log_console "Viewed inventory"
+}
+
+# 🔍 SEARCH PRODUCT
+search_product() {
+    read -p "Enter product name: " product
+    grep -i "$product" "$INVENTORY_FILE"
+    log_console "Searched product: $product"
+}
+
+# 🛒 CHECKOUT SYSTEM
+checkout() {
+    echo "==== CHECKOUT ===="
+    view_inventory
+
+    read -p "Enter product: " product
+    read -p "Enter quantity: " qty
+
+    # Validate numeric input
+    if ! [[ "$qty" =~ ^[0-9]+$ ]]; then
+        echo "Invalid quantity"
+        return
+    fi
+
+    # Check stock
+    stock=$(awk -F, -v p="$product" '$1==p {print $2}' "$INVENTORY_FILE")
+
+    if [[ -z "$stock" ]]; then
+        echo "Product not found"
+        return
+    fi
+
+    if (( qty > stock )); then
+        echo "Not enough stock"
+        return
+    fi
+
+    new_stock=$((stock - qty))
+
+    # Safe inventory update (RETAIL-004 fix using awk)
+    awk -F, -v p="$product" -v ns="$new_stock" 'BEGIN{OFS=","}
+    {
+        if ($1 == p) $2 = ns
+        print
+    }' "$INVENTORY_FILE" > temp && mv temp "$INVENTORY_FILE"
+
+    # Logging
+    echo "$(date) | $product | $qty | $qty" >> "$SALES_LOG"
+    echo "$(date) | $product | $stock -> $new_stock" >> "$INVENTORY_LOG"
+    log_console "Checkout: $product x$qty"
+
+    # Receipt
+    echo "---- RECEIPT ----"
+    echo "$product x $qty"
+    echo "Total: $qty"
+}
+
+# 📊 SALES REPORT
+sales_report() {
+    echo "==== SALES REPORT ===="
+    awk -F'|' '
+    {
+        gsub(/ /, "", $2)
+        gsub(/ /, "", $3)
+        product[$2] += $3
+        total += $3
+    }
+    END {
+        printf "%-15s %-10s\n", "Product", "Qty"
+        print "---------------------------"
+        for (p in product) {
+            printf "%-15s %-10d\n", p, product[p]
+        }
+        print "---------------------------"
+        print "TOTAL SALES:", total
+    }' "$SALES_LOG"
+
+    log_console "Viewed sales report"
+}
+
+# 💾 BACKUP SYSTEM
+backup_system() {
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    backup_folder="$BACKUP_DIR/backup_$timestamp"
+
+    mkdir -p "$backup_folder"
+
+    cp "$INVENTORY_FILE" "$backup_folder/"
+    cp "$SALES_LOG" "$backup_folder/"
+
+    echo "Backup created at $backup_folder"
+    log_console "Backup created"
+}
+
+# 📜 VIEW LOGS
+view_logs() {
+    echo "==== CONSOLE LOG ===="
+    tail -n 10 "$CONSOLE_LOG"
+}
+
+# 📋 MAIN MENU
+main_menu() {
+    while true; do
+        echo ""
+        echo "==== MAIN MENU ===="
+        echo "1. View Inventory"
+        echo "2. Checkout Items"
+        echo "3. Sales Report"
+        echo "4. Search Product"
+        echo "5. Backup System"
+        echo "6. View Logs"
+        echo "7. Exit"
+
+        read -p "Select option: " choice
+
+        case $choice in
+            1) view_inventory ;;
+            2) checkout ;;
+            3) sales_report ;;
+            4) search_product ;;
+            5) backup_system ;;
+            6) view_logs ;;
+            7) echo "Goodbye!"; exit ;;
+            *) echo "Invalid option" ;;
+        esac
+    done
+}
+
+# 🚀 RUN SYSTEM
+login
+main_menu

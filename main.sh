@@ -1,31 +1,23 @@
 #!/bin/bash
 
 echo "=============================="
-echo "   TECHSTORE POS SYSTEM"
+echo "   TECHSTORE POS SYSTEM       "
 echo "=============================="
 
 # ==============================
 # LOGIN
 # ==============================
 echo "Username:"
-read username
+read -r username
 
 echo "PIN:"
-read pin
+read -rs pin
+echo ""
 
-valid=false
-
-while IFS=: read -r user pass
-do
-    if [ "$username" = "$user" ] && [ "$pin" = "$pass" ]; then
-        valid=true
-        break
-    fi
-done < users.txt
-
-if [ "$valid" = false ]; then
+if grep -q "^$username:$pin$" users.txt; then
+    echo "Login successful!"
+else
     echo "Invalid login!"
-    exit 1
 fi
 
 echo "Login successful. Welcome $username!"
