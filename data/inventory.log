@@ -1,6 +1,5 @@
-echo "$timestamp | $name | -$qty | remaining:$new_stock" >> data/inventory.log2026-04-28 22:38:44 | apple | -3 | remaining:47
-2026-04-28 22:43:15 | bread | -2 | remaining:48
-2026-04-28 22:58:24 | eggs | -6 | remaining:44
-2026-04-29 17:35:07 | mango | -10 | remaining:38
-2026-05-03 17:37:05 | P001 | -10 | remaining:
-2026-05-03 18:33:46 | P001 | iPhone 13 | -10 | remaining:5
+2026-05-05 16:35:41 | P005 | iPad Pro | -2 | remaining:8
+2026-05-05 17:03:57 | P002 | Samsung S23 | -3 | remaining:17
+2026-05-05 17:08:02 | P002 | Samsung S23 | -2 | remaining:15
+2026-05-05 17:15:12 | P003 | MacBook Air | -1 | remaining:9
+2026-05-05 17:29:03 | P002 | Samsung S23 | -1 | remaining:14

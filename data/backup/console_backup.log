@@ -39,6 +39,8 @@
 2026-04-29 20:19:57 | Solomon | Searched Product
 2026-04-29 20:22:09 | Solomon | Backup System Executed
 2026-04-29 20:23:03 | Solomon | Backup System Executed
+2026-04-29 20:23:50 | Solomon | Viewed Logs
+2026-04-29 20:38:38 | Solomon | Exited System
 =======
 2026-05-02 05:43:36 | Jen | Searched Product
 2026-05-02 05:45:30 | Jen | Checkout Started
@@ -50,4 +52,58 @@
 2026-05-02 05:51:06 | Jen | Checkout Started
 2026-05-02 05:51:43 | Jen | Viewed Low Stock
 2026-05-02 05:52:16 | Jen | Backup System Executed
+2026-05-02 05:52:37 | Jen | Viewed Logs
+2026-05-02 05:54:12 | Jen | Exited System
 >>>>>>> c23277eb715cb03baeed12219f2ba72113338f46
+2026-05-04 18:08:47 | Jordy | Exited System
+2026-05-04 18:09:28 | Jordy | Viewed Low Stock
+2026-05-04 18:09:45 | Jordy | Viewed Sales Report
+2026-05-04 18:10:02 | Jordy | Searched Product
+2026-05-04 18:10:33 | Jordy | Searched Product
+2026-05-04 18:10:56 | Jordy | Checkout Started
+2026-05-04 18:11:24 | Jordy | Backup System Executed
+2026-05-04 18:11:31 | Jordy | Viewed Logs
+2026-05-05 16:10:53 | Jordy | Viewed Logs
+2026-05-05 16:25:36 | Jordy | Exited System
+2026-05-05 16:27:38 | Jordy | Viewed Low Stock
+2026-05-05 16:27:51 | Jordy | Viewed Sales Report
+2026-05-05 16:27:59 | Jordy | Searched Product
+2026-05-05 16:28:58 | Jordy | Viewed Low Stock
+2026-05-05 16:29:01 | Jordy | Viewed Sales Report
+2026-05-05 16:34:49 | Jordy | Backup System Executed
+2026-05-05 16:34:51 | Jordy | Exited System
+2026-05-05 16:37:24 | Jordy | Searched Product
+2026-05-05 16:40:14 | Jordy | Exited System
+2026-05-05 16:47:13 | Jordy | Searched Product
+2026-05-05 16:49:13 | Jordy | Searched Product
+2026-05-05 16:49:26 | Jordy | Exited System
+2026-05-05 16:49:37 | Jordy | Searched Product
+2026-05-05 16:53:11 | Jordy | Exited System
+2026-05-05 16:53:43 | Joy | Searched Product
+2026-05-05 16:57:57 | Joy | Viewed Low Stock
+2026-05-05 16:58:01 | Joy | Viewed Sales Report
+2026-05-05 16:59:17 | Joy | Viewed Sales Report
+2026-05-05 17:02:04 | Joy | Exited System
+2026-05-05 17:02:12 | Jordy | Searched Product
+2026-05-05 17:02:27 | Jordy | Viewed Sales Report
+2026-05-05 17:03:23 | Jordy | Searched Product
+2026-05-05 17:03:34 | Jordy | Checkout Started
+2026-05-05 17:04:06 | Jordy | Backup System Executed
+2026-05-05 17:04:15 | Jordy | Viewed Logs
+2026-05-05 17:06:19 | Jordy | Exited System
+2026-05-05 17:07:30 | Jordy | Viewed Sales Report
+2026-05-05 17:07:41 | Jordy | Checkout Started
+2026-05-05 17:08:06 | Jordy | Viewed Logs
+2026-05-05 17:14:49 | Jordy | Checkout Started
+2026-05-05 17:15:16 | Jordy | Viewed Logs
+2026-05-05 17:23:07 | Jordy | Exited System
+2026-05-05 17:23:19 | Jordy | Viewed Sales Report
+2026-05-05 17:23:33 | Jordy | Viewed Logs
+2026-05-05 17:28:20 | Jordy | Exited System
+2026-05-05 17:28:29 | Jordy | Viewed Logs
+2026-05-05 17:28:46 | Jordy | Checkout Started
+2026-05-05 17:29:12 | Jordy | Viewed Logs
+2026-05-05 17:30:23 | Jordy | Viewed Low Stock
+2026-05-05 17:30:34 | Jordy | Viewed Sales Report
+2026-05-05 17:30:55 | Jordy | Searched Product
+2026-05-05 17:31:13 | Jordy | Backup System Executed

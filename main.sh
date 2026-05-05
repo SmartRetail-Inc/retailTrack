@@ -14,10 +14,11 @@ echo "PIN:"
 read -rs pin
 echo ""
 
-if grep -q "^$username:$pin$" users.txt; then
-    echo "Login successful!"
+if grep -q "^${username}:${pin}$" users.txt; then
+    echo "Welcome $username!"
 else
     echo "Invalid login!"
+    exit 1
 fi
 
 echo "Login successful. Welcome $username!"

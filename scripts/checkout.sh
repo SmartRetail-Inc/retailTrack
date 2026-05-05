@@ -1,5 +1,9 @@
 #!/bin/bash
 
+INVENTORY_FILE="data/inventory.csv"
+SALES_FILE="data/sales.log"
+INV_LOG="data/inventory.log"
+
 echo "=============================="
 echo "     AVAILABLE PRODUCTS"
 echo "=============================="
@@ -7,7 +11,7 @@ echo "=============================="
 printf "%-6s | %-15s | %-10s | %-6s | %-8s\n" "ID" "Product" "Category" "Stock" "Price"
 echo "-----------------------------------------------------------"
 
-while IFS=',' read -r id name category stock price
+tail -n +2 "$INVENTORY_FILE" | while IFS=',' read -r id name category stock price
 do
     id=$(echo "$id" | xargs)
     name=$(echo "$name" | xargs)
@@ -16,7 +20,7 @@ do
     price=$(echo "$price" | xargs)
 
     printf "%-6s | %-15s | %-10s | %-6s | $%-8s\n" "$id" "$name" "$category" "$stock" "$price"
-done < <(tail -n +2 data/inventory.csv)
+done
 
 echo ""
 echo "Enter product ID (e.g. P001):"
@@ -28,18 +32,14 @@ read qty
 product_id=$(echo "$product_id" | xargs | tr '[:lower:]' '[:upper:]')
 qty=$(echo "$qty" | xargs)
 
-line=$(grep -i "^$product_id," data/inventory.csv)
+line=$(grep -i "^$product_id," "$INVENTORY_FILE")
 
 if [ -z "$line" ]; then
     echo "Product not found!"
     exit 1
 fi
 
-id=$(echo "$line" | cut -d',' -f1)
-name=$(echo "$line" | cut -d',' -f2)
-category=$(echo "$line" | cut -d',' -f3)
-stock=$(echo "$line" | cut -d',' -f4)
-price=$(echo "$line" | cut -d',' -f5)
+IFS=',' read -r id name category stock price <<< "$line"
 
 stock=$((stock))
 qty=$((qty))
@@ -58,18 +58,31 @@ fi
 total=$((qty * price))
 new_stock=$((stock - qty))
 
+# ==============================
+# UPDATE INVENTORY
+# ==============================
 awk -F',' -v id="$id" -v new_stock="$new_stock" '
 BEGIN {OFS=","}
 NR==1 {print; next}
 $1==id {$4=new_stock}
 {print}
-' data/inventory.csv > data/inventory.tmp && mv data/inventory.tmp data/inventory.csv
+' "$INVENTORY_FILE" > data/inventory.tmp && mv data/inventory.tmp "$INVENTORY_FILE"
 
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
-echo "$id,$name,$qty,$price,$total" >> data/sales.log
-echo "$timestamp | $id | $name | -$qty | remaining:$new_stock" >> data/inventory.log
+# ==============================
+# SAVE SALES LOG (FIXED)
+# ==============================
+echo "$timestamp | $id | $name | $qty | $price | $total" >> "$SALES_FILE"
 
+# ==============================
+# INVENTORY LOG
+# ==============================
+echo "$timestamp | $id | $name | -$qty | remaining:$new_stock" >> "$INV_LOG"
+
+# ==============================
+# RECEIPT
+# ==============================
 echo ""
 echo "=============================="
 echo "         RECEIPT"

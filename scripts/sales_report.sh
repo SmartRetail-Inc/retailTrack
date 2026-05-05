@@ -1,30 +1,30 @@
 #!/bin/bash
 
-echo "=============================="
-echo "      SALES REPORT"
-echo "=============================="
-echo "Generated on: $(date '+%Y-%m-%d %H:%M:%S')"
-echo "=============================="
+FILE="data/sales.log"
 
-printf "%-6s | %-15s | %-5s | %-8s | %-8s\n" "ID" "Product" "Qty" "Price" "Total"
-echo "-----------------------------------------------------------"
+echo "============================== SALES REPORT =============================="
+echo "Generated: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "======================================================================"
 
+printf "%-6s | %-15s | %-3s | %-10s | %-6s\n" "ID" "Product" "Qty" "Unit Price" "Total"
+echo "----------------------------------------------------------------------"
+
+count=0
 total_sales=0
 
 while IFS=',' read -r id name qty price total
 do
-    [ -z "$id" ] && continue
+    [[ -z "$id" ]] && continue
 
-    qty=$(echo "$qty" | tr -cd '0-9')
-    total=$(echo "$total" | tr -cd '0-9')
+    printf "%-6s | %-15s | %3s | $%-9s | $%-6s\n" \
+    "$id" "$name" "$qty" "$price" "$total"
 
-    printf "%-6s | %-15s | %-5s | $%-7s | $%-8s\n" "$id" "$name" "$qty" "$price" "$total"
-
+    count=$((count + 1))
     total_sales=$((total_sales + total))
 
-done < data/sales.log
+done < "$FILE"
 
-echo ""
-echo "=============================="
+echo "----------------------------------------------------------------------"
+echo "TOTAL RECORDS: $count"
 echo "TOTAL SALES: \$$total_sales"
-echo "=============================="
+echo "======================================================================"
