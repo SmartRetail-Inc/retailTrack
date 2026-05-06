@@ -32,10 +32,29 @@ log_action() {
 }
 
 # ==============================
+# SESSION TIMEOUT SETTINGS
+# ==============================
+SESSION_TIMEOUT=90   # 1.5 minutes
+start_time=$(date +%s)
+
+# ==============================
 # MENU LOOP
 # ==============================
 while true
 do
+    # ==============================
+    # CHECK TIMEOUT
+    # ==============================
+    current_time=$(date +%s)
+    elapsed=$((current_time - start_time))
+
+    if [ "$elapsed" -ge "$SESSION_TIMEOUT" ]; then
+        echo ""
+        echo "⏰ Session expired. Logging out..."
+        log_action "Auto Logout (Session Timeout)"
+        exit 0
+    fi
+
     echo ""
     echo "===== MAIN MENU ====="
     echo "1. View Low Stock"

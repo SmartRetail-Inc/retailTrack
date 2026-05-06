@@ -6,21 +6,32 @@ echo "============================== SALES REPORT ==============================
 echo "Generated: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "======================================================================"
 
-printf "%-6s | %-15s | %-3s | %-10s | %-6s\n" "ID" "Product" "Qty" "Unit Price" "Total"
+printf "%-19s | %-6s | %-15s | %-5s | %-10s | %-8s\n" \
+"Timestamp" "ID" "Product" "Qty" "Unit Price" "Total"
+
 echo "----------------------------------------------------------------------"
 
-count=0
 total_sales=0
+count=0
 
-while IFS=',' read -r id name qty price total
+while IFS='|' read -r timestamp id name qty price total
 do
-    [[ -z "$id" ]] && continue
+    # clean spaces
+    timestamp=$(echo "$timestamp" | xargs)
+    id=$(echo "$id" | xargs)
+    name=$(echo "$name" | xargs)
+    qty=$(echo "$qty" | xargs)
+    price=$(echo "$price" | xargs)
+    total=$(echo "$total" | xargs)
 
-    printf "%-6s | %-15s | %3s | $%-9s | $%-6s\n" \
-    "$id" "$name" "$qty" "$price" "$total"
+    # skip bad lines
+    [[ ! "$id" =~ ^P[0-9]+$ ]] && continue
 
-    count=$((count + 1))
+    printf "%-19s | %-6s | %-15s | %-5s | $%-9s | $%-8s\n" \
+    "$timestamp" "$id" "$name" "$qty" "$price" "$total"
+
     total_sales=$((total_sales + total))
+    count=$((count + 1))
 
 done < "$FILE"
 
